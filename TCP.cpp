@@ -123,7 +123,6 @@ int stud_tcp_input(char *pBuffer, unsigned short len, unsigned int srcAddr, unsi
     else if (len > 20)  // this packet contains data
         seqAdd = len - 20;
     if (head->ackNo != (tcb->seq + seqAdd)){
-        // ？？？
         Log(TAG, "Error 2");
         tcp_DiscardPkt(pBuffer, STUD_TCP_TEST_SEQNO_ERROR);
         return -1;
@@ -139,7 +138,6 @@ int stud_tcp_input(char *pBuffer, unsigned short len, unsigned int srcAddr, unsi
         stud_tcp_output(NULL, 0, PACKET_TYPE_ACK, tcb->srcPort, tcb->dstPort, tcb->srcAddr, tcb->dstAddr);  // ??? when to init tcb
         return 0;
     } else if (tcb->state == ESTABLISHED && head->flag == PACKET_TYPE_ACK){
-        // ？？？
         // update seq & ack and do nothing
         tcb->seq = head->ackNo;
         tcb->ack = head->seqNo + seqAdd;
@@ -152,7 +150,7 @@ int stud_tcp_input(char *pBuffer, unsigned short len, unsigned int srcAddr, unsi
         return 0;
     } else if (tcb->state == FIN_WAIT2 && head->flag == PACKET_TYPE_FIN_ACK){
         Log(TAG, "convert state to TIME_WAIT");
-        tcb->state = da;
+        tcb->state = TIME_WAIT;
         stud_tcp_output(NULL, 0, PACKET_TYPE_ACK, tcb->srcPort, tcb->dstPort, tcb->srcAddr, tcb->dstAddr);
         return 0;
     }
