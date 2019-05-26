@@ -1,2 +1,2 @@
-# NetLab
+# Net-Lab
 Computer Network Lab.
